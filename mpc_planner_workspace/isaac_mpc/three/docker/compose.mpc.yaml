@@ -1,0 +1,13 @@
+services:
+  mpc:
+    extends:
+      file: docker/legacy/compose.legacy_mpc.yaml
+      service: ros
+    profiles: [mpc]
+    image: antbot-mpc:jazzy
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.mpc
+    volumes:
+      - .:/workspace:rw
+    command: bash

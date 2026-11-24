@@ -1,0 +1,9 @@
+# Python 3.10 / acados environment; upstream requirements target Python 3.8 / FORCES.
+casadi==3.6.5
+numpy==1.26.4
+scipy==1.10.1
+PyYAML==6.0.2
+matplotlib==3.7.5
+requests==2.32.3
+pytest==8.3.3
+pytest-cov==4.1.0

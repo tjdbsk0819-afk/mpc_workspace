@@ -1,0 +1,66 @@
+name: antbot
+N: 30
+integrator_step: 0.2
+n_discs: 1
+max_obstacles: 1
+control_frequency: 10
+enable_output: false  # Planner publishes paths; RPP owns cmd_vel.
+debug_output: false
+debug_limits: false
+debug_visuals: false
+antbot_limits: {speed: 1.0, acceleration: 0.5, yaw_rate: 0.8}
+goal_handling:
+  approach_gain: 0.8
+  approach_deceleration: 0.35
+  position_weight: 0.2
+  terminal_position_weight: 5.0
+  heading_weight: 6.0
+  approach_heading_weight: 0.5
+  stop_reserve: 0.08
+  reaction_time: 0.25
+yaw_continuity:
+  enabled: true
+  weight: 2.0
+  reference_timeout: 0.35
+  decay_time: 1.0
+  max_yaw_acceleration: 0.5
+  first_command_horizon: 0.1
+  recovery_relax_time: 1.0
+solver_settings:
+  solver: acados
+  acados: {iterations: 10, solver_type: SQP_RTI, qp_iterations: 150}
+  forces: {use_sqp: false}
+recording:
+  enable: false
+  folder: /workspace/results/upstream_mpc
+  file: antbot
+  timestamp: true
+  num_experiments: 1000000
+deceleration_at_infeasible: 0.5
+# Initial circular approximation of the 0.70 x 0.60 m RPP footprint.
+# Confirm against the actual USD before interpreting physical clearance.
+robot_radius: 0.5
+robot: {length: 0.7, width: 0.6, com_to_back: 0.0}
+obstacle_radius: 0.5
+antbot_safety_margin: 0.15
+# Additional planning room for controller tracking; final minimum stays 1.15m.
+antbot_tracking_margin: 0.05
+shift_previous_solution_forward: false
+contouring:
+  dynamic_velocity_reference: false
+  num_segments: 5
+  preview: 0.0
+  add_road_constraints: false
+road: {two_way: false, width: 6.0}
+# Mean-motion model is selected in peer_prediction.yaml (CV + Gaussian).
+probabilistic: {enable: true, risk: 0.05, propagate_uncertainty: true}
+weights:
+  acceleration: 0.34
+  angular_velocity: 0.85
+  velocity: 2.0
+  reference_velocity: 1.0
+  contour: 0.1
+  lag: 0.75
+  terminal_angle: 0.0
+  terminal_contouring: 0.0
+visualization: {draw_every: 5}

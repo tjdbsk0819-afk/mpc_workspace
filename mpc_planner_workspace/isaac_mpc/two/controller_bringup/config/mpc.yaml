@@ -1,0 +1,10 @@
+/**:
+  ros__parameters:
+    use_sim_time: true
+    mode: centralized
+    robot_index: 0
+    scenario: A
+    config_path: ""
+    world_frame: world
+    robot_names: [robot_a, robot_b]
+    solver_startup_timeout: 15.0

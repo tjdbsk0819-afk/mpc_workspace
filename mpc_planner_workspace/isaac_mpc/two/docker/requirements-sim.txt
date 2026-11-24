@@ -1,0 +1,4 @@
+# Wheels available for CPython 3.12 on Linux; independent of the host venv.
+casadi==3.7.0
+numpy==2.2.6
+matplotlib==3.10.3

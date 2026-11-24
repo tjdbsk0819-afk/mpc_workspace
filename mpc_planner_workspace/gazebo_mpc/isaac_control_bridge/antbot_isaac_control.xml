@@ -1,0 +1,11 @@
+<library path="antbot_isaac_topic_system">
+  <class
+    name="antbot_isaac_control/IsaacTopicSystem"
+    type="antbot_isaac_control::IsaacTopicSystem"
+    base_class_type="hardware_interface::SystemInterface">
+    <description>
+      Bridges ros2_control state and command interfaces to the Antbot Isaac Lab
+      /joint_states and /joint_command topics.
+    </description>
+  </class>
+</library>

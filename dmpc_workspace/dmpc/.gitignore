@@ -1,0 +1,15 @@
+.vscode
+__pycache__
+.DS_Store
+figures/
+archive/*
+*.egg-info/
+build/
+.pytest_cache/
+.venv/
+isaac/message_build/
+isaac/control_build/
+isaac/results/
+isaac/.isaac-sim/
+isaac/docker/web-viewer/node_modules/
+isaac/docker/web-viewer/dist/

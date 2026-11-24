@@ -1,0 +1,4 @@
+# ROS 2 Jazzy uses Python 3.12. Keep NumPy 1.x for ROS binary compatibility.
+casadi==3.7.0
+numpy==1.26.4
+matplotlib==3.10.3

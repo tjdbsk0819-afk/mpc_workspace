@@ -1,0 +1,31 @@
+FROM python:3.12-slim-bookworm
+
+LABEL org.opencontainers.image.title="AntBot DMPC simulation" \
+      org.opencontainers.image.description="Two omnidirectional robots with CasADi/IPOPT, standalone Python simulation"
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    MPLBACKEND=Agg \
+    MPLCONFIGDIR=/tmp/antbot-matplotlib \
+    OPENBLAS_NUM_THREADS=1 \
+    OMP_NUM_THREADS=1
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY docker/legacy/requirements-sim.txt /opt/antbot/requirements.txt
+RUN python -m pip install --no-cache-dir -r /opt/antbot/requirements.txt
+
+WORKDIR /workspace
+COPY . .
+RUN python -m pip install --no-cache-dir --no-deps . \
+    && python -m unittest discover -s tests -v
+
+RUN groupadd --gid 1000 antbot \
+    && useradd --uid 1000 --gid 1000 --create-home antbot \
+    && mkdir -p /workspace/results \
+    && chown -R antbot:antbot /workspace
+USER antbot
+
+CMD ["python", "-m", "legacy_mpc_reference.simulate", "--scenario", "A", "--mode", "both", "--output", "results"]

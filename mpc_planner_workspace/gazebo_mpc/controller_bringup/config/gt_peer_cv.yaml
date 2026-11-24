@@ -1,0 +1,11 @@
+/**:
+  ros__parameters:
+    use_sim_time: true
+    world_frame: world
+    # Include t=0 and N future steps at the MPC's integrator_step.
+    # 31 samples: k=0..30, from now through now+6.0 seconds.
+    prediction_steps: 31
+    prediction_dt: 0.2
+    publish_frequency: 20.0
+    max_state_age: 0.5    # simulation seconds since the GT sample
+    max_receive_age: 0.5  # wall seconds since a NEW sample was received

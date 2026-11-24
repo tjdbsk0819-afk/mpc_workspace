@@ -1,0 +1,10 @@
+FROM mpc-workspace:humble
+
+USER root
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gazebo \
+    ros-humble-gazebo-ros-pkgs \
+    ros-humble-gazebo-ros2-control \
+    ros-humble-robot-state-publisher \
+    ros-humble-xacro \
+    && rm -rf /var/lib/apt/lists/*

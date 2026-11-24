@@ -1,0 +1,9 @@
+# Shared by MPC, GT observer and MPC-native RPP in the two-robot launches.
+# cv_gaussian: mean follows measured GT velocity; Gaussian uncertainty grows.
+# Alternatives: gaussian_random_walk (no velocity drift), cv (deterministic).
+/**:
+  ros__parameters:
+    peer_prediction_model: cv_gaussian
+    peer_prediction_noise: 0.3
+    peer_prediction_dt: 0.2
+    peer_prediction_risk: 0.05

@@ -1,0 +1,384 @@
+{
+  "source": "/home/ubuntu/tjdbsk/mpc_planner_workspace/isaac_mpc/two",
+  "description": "Isaac runtime, AntBot assets, ROS interfaces, RPP and Swerve reference snapshot. Local adaptations are documented in README.md.",
+  "files": [
+    {
+      "path": "simulation/run_two_antbots.sh",
+      "sha256": "db4601cba62f5f562ac64b4ca42b5cad1d4ca4480bb6ceac1b3682dbe164adc1"
+    },
+    {
+      "path": "simulation/run_two_antbots.py",
+      "sha256": "2f167308de43837a554103abffac20654849c6f4ad0f94ed9048c8085a2b8fc2"
+    },
+    {
+      "path": "simulation/__init__.py",
+      "sha256": "17e6c940516becf63e7863d8534c2f4203d723854f64f4f81f11e370312306f8"
+    },
+    {
+      "path": "simulation/helpers/rpp_config.py",
+      "sha256": "9cc4041c0be8b6ecf692dfcc4b91e29cdcc3941977504508206589fa2bfde946"
+    },
+    {
+      "path": "simulation/helpers/controller_config.py",
+      "sha256": "18786cb24c9ce5524e1ed94cf53eeb6827bee4db8c348926f3f98ab7abd31ef4"
+    },
+    {
+      "path": "simulation/helpers/state_utils.py",
+      "sha256": "a1fc584f0b3d6337a7ee7a3822feffa12635e5bfe7a8a3e5cdc33d9001de9e3b"
+    },
+    {
+      "path": "simulation/helpers/__init__.py",
+      "sha256": "ba9b9a685c5260fa46ed43c351790a07c1ad52bb412c229838b27f8f1e1acd77"
+    },
+    {
+      "path": "simulation/helpers/scenario_config.py",
+      "sha256": "965ea1f8b74c04e198dd8988c2232701a31bd934a17ee2befe9e181d754d7acf"
+    },
+    {
+      "path": "simulation_runtime/environment.py",
+      "sha256": "08eae16f884f151b404188c7900bc92600d5013f1718339a78f98f0e60237564"
+    },
+    {
+      "path": "simulation_runtime/run_antbot.py",
+      "sha256": "77d444c371914cd877ef1a94f8c5600945608c4cdec2c22a22a89b693464363d"
+    },
+    {
+      "path": "simulation_runtime/__init__.py",
+      "sha256": "90b70892bbcc7fb6eca66fa60777217b667f9b061e8c95f925952b5c3e9fc3d4"
+    },
+    {
+      "path": "simulation_runtime/action_graph.py",
+      "sha256": "dd7d2cb86dbbca77c4e68a6a11b0b4c87f920f2cc81fd310723f0e6cec481018"
+    },
+    {
+      "path": "simulation_runtime/ros2/__init__.py",
+      "sha256": "665b45b85a738f0fa0f94d44c0ab250f96ac8757fd02128f40601c77c0354ecc"
+    },
+    {
+      "path": "simulation_runtime/ros2/subscriber.py",
+      "sha256": "480e6d30d7634cf5a2f5df888774f650ef668bfaf7097c87a90a01f6343a9370"
+    },
+    {
+      "path": "simulation_runtime/ros2/publisher.py",
+      "sha256": "4a077b4c9ca40fbfe16d13377818b267cc77e8c8870b942739958acaeb7d5f37"
+    },
+    {
+      "path": "simulation_runtime/ros2_config/zenoh_session.json5",
+      "sha256": "ce5e015fd8b756c31407de9235d5364dba86ad7de0b1cc30c4c03ac8f27cef1b"
+    },
+    {
+      "path": "robot_model/asset.py",
+      "sha256": "2db3bc0a8d024ff4a9ddc0e39708fafa0d92511e0986b7fb3e62cd16517bd0b0"
+    },
+    {
+      "path": "robot_model/antbot.urdf",
+      "sha256": "b45b70ecd7b4b718f9fb57baba5a32fb05ecb6a8d037741e27d2433916f19a1e"
+    },
+    {
+      "path": "robot_model/__init__.py",
+      "sha256": "de1a5ebb22fc7cf81f0fa1eb44a93a6e6af8eedb4e19abc806cf5ebd082b83bf"
+    },
+    {
+      "path": "robot_model/sensors.py",
+      "sha256": "40e4e9fda4d9bd8f30ff13c0cdf26bc9df47c233451eaa2828fb17eedd911325"
+    },
+    {
+      "path": "robot_model/robot_usd/antbot.usd",
+      "sha256": "ffc96235de889bdbda9377e3ddf38b15114709a8831e796584f2bcb733b21b12"
+    },
+    {
+      "path": "robot_model/robot_usd/configuration/antbot_sensor.usd",
+      "sha256": "c3a3fcccf11b9fc2482426e83c608bf8d75808b7450a8c480d4c8ce09fdb3314"
+    },
+    {
+      "path": "robot_model/robot_usd/configuration/antbot_robot.usd",
+      "sha256": "93e4c32faaccb98db43764e7e20857069ca2d9e3be97084fbf7df0f36bdc9a82"
+    },
+    {
+      "path": "robot_model/robot_usd/configuration/antbot_base.usd",
+      "sha256": "03456d8f1f7f85d84ebab5152f22343c82134abe6c10e3832ab41131a0250fb4"
+    },
+    {
+      "path": "robot_model/robot_usd/configuration/antbot_physics.usd",
+      "sha256": "7653683ce8229746492507c35ce9d4623cb323c768a9be418ad5f4d462591a12"
+    },
+    {
+      "path": "ros_messages/gaemi_interfaces/package.xml",
+      "sha256": "f89d4c819b3f46ecc811c4b64c388e6acadda92e5d2997714b686ffe40f16361"
+    },
+    {
+      "path": "ros_messages/gaemi_interfaces/CMakeLists.txt",
+      "sha256": "92b9d4a6da85f4f7b908211526d9bd0e6f51391dc812cc95eb66bf69fe177347"
+    },
+    {
+      "path": "ros_messages/antbot_interfaces/package.xml",
+      "sha256": "e2da01280cff3585ca2659bbe451d778d07526629ab0610bce24d8474112fe97"
+    },
+    {
+      "path": "ros_messages/antbot_interfaces/CMakeLists.txt",
+      "sha256": "10f998c20f9140199282ff1519b74b27c3d582fe3f18714587a9bb38c1cd7599"
+    },
+    {
+      "path": "ros_messages/gaemi_interfaces/msg/MonoCameraArray.msg",
+      "sha256": "cdc62d1fea611a03e32c6c4e23706f47b821fbdd351f2b2ab2725a26406d2715"
+    },
+    {
+      "path": "ros_messages/gaemi_interfaces/msg/DepthCameraArray.msg",
+      "sha256": "10250e888e43bfe9cd5fcb1af91f426fd2cbbaf69186ff7a9d6076675e9ce39c"
+    },
+    {
+      "path": "ros_messages/antbot_interfaces/msg/PeerState.msg",
+      "sha256": "8bfa4c569994963d68fb55abd05a1567150ccae7b438989ce77a7d7804b8ef6f"
+    },
+    {
+      "path": "ros_messages/antbot_interfaces/msg/MpcPlan.msg",
+      "sha256": "be2a5292dcab4ff87a75b2b5753137fc88ecec4cdac852fa9447ac266103388a"
+    },
+    {
+      "path": "ros_messages/antbot_interfaces/msg/JointCommandFeedback.msg",
+      "sha256": "d134e185ebd80d47a816094501dbf6404c87be4431fe6ce0079a2fc7f067f0c0"
+    },
+    {
+      "path": "ros_messages/antbot_interfaces/include/antbot_interfaces/workspace_bounds.hpp",
+      "sha256": "ec640fa1864dda58d59c6ce6c4e1f6ee654fc12716c93b89adb35994cf7fb48b"
+    },
+    {
+      "path": "ros_messages/antbot_interfaces/include/antbot_interfaces/peer_prediction.hpp",
+      "sha256": "36c19bc0b121b85db58b550a863d81d2f260c1dd53769a34a31b912ab57e4bbb"
+    },
+    {
+      "path": "ros_messages/antbot_interfaces/include/antbot_interfaces/static_obstacle.hpp",
+      "sha256": "180f5f1386da7a65c0a7b0e5e74d4c718f6a862e99ec0945eee9533e3a958570"
+    },
+    {
+      "path": "swerve_controller/package.xml",
+      "sha256": "1ea4a0f010cf05d36e9d5822139ab76fe5b6b0ef4bc269705172c0ee6596787f"
+    },
+    {
+      "path": "swerve_controller/antbot_swerve_controller.xml",
+      "sha256": "f13d30f343db4433678ba2b0e4db0b576a4ac928033b719d9cb6dad758582673"
+    },
+    {
+      "path": "swerve_controller/CMakeLists.txt",
+      "sha256": "8045bcb44fd7a6f57d02334dc195cedcb84baf845f0e0495980b9b705cef6488"
+    },
+    {
+      "path": "swerve_controller/src/swerve_drive_controller.cpp",
+      "sha256": "46c5755a54126e796aacc2b0583dcbc712e13f800c7df775aac5ec17c0b815f7"
+    },
+    {
+      "path": "swerve_controller/src/odometry.cpp",
+      "sha256": "2289b2a42672d61358e2b072478c1501cbc068462f337a90f638178843890016"
+    },
+    {
+      "path": "swerve_controller/src/swerve_motion_control.cpp",
+      "sha256": "5dcd33a55ce4655cb6919b14e995a23894f1e8d255e11f274178306184092a91"
+    },
+    {
+      "path": "swerve_controller/src/speed_limiter.cpp",
+      "sha256": "dd52e12f268ffa1d62112904b434b3ec39b4ce336514235a50c1ec5419ca0ef7"
+    },
+    {
+      "path": "swerve_controller/config/swerve_drive_controller.yaml",
+      "sha256": "4e9f205a99d81e0d1ed4af2d827565dcbec24cf28c0a0875f200389b63fa9afd"
+    },
+    {
+      "path": "swerve_controller/config/swerve_drive_controller_parameter.yaml",
+      "sha256": "89c26ab7ef65b3952f0cc3bc583c66984c3eaed53c6de2285dcae9462b313df7"
+    },
+    {
+      "path": "swerve_controller/include/antbot_swerve_controller/swerve_drive_controller.hpp",
+      "sha256": "105eac31a4ccc8ade6c728644e373cf7f807ff9c676f84c6f693dd76934e3ebb"
+    },
+    {
+      "path": "swerve_controller/include/antbot_swerve_controller/swerve_motion_control.hpp",
+      "sha256": "024ed11bace493fb2d8f93f42c0f2fc83abe938f2fd9174d42de3b30b7d77f0c"
+    },
+    {
+      "path": "swerve_controller/include/antbot_swerve_controller/joint_tracking_guard.hpp",
+      "sha256": "c697fc8850c0a020e4d4755b179a021f29351b4b6a7afbff3228299d9ae2358c"
+    },
+    {
+      "path": "swerve_controller/include/antbot_swerve_controller/speed_limiter.hpp",
+      "sha256": "e9b03dfb95a031111e5379dd8279647bb3d9260f4c4fe251ea888c76c6d4b19e"
+    },
+    {
+      "path": "swerve_controller/include/antbot_swerve_controller/odometry.hpp",
+      "sha256": "84055d0356c063cf2f8b9230f1fe1a857e99abeaf556ca63a5ce001a3549cf6e"
+    },
+    {
+      "path": "isaac_control_bridge/package.xml",
+      "sha256": "c015387d1ca375e81970e95f7c723076f400e03b717e245eeee26534e620c7df"
+    },
+    {
+      "path": "isaac_control_bridge/CMakeLists.txt",
+      "sha256": "5ebb30dfabd7f431d1ffde775d46cd044fb9f99dcf66e424ad813b4a7ef0711e"
+    },
+    {
+      "path": "isaac_control_bridge/antbot_isaac_control.xml",
+      "sha256": "26cf5f6b4ccf6e86ff04cece98ec73b32aaaab2081f43b9d7bfc758539da9d9a"
+    },
+    {
+      "path": "isaac_control_bridge/launch/antbot_isaac_control.launch.py",
+      "sha256": "b1e16a19279b751b8b7218ea161705357bb6da654476621e9070374e4d7a1d0b"
+    },
+    {
+      "path": "isaac_control_bridge/src/isaac_topic_system.cpp",
+      "sha256": "5655a1e3b88cbc8322f170c4df7a4747205248e9aa8b9cdcdaa7cf0b048b94aa"
+    },
+    {
+      "path": "isaac_control_bridge/urdf/ros2_control_isaac.xacro",
+      "sha256": "3649850e0fa40171280b9e2497a5204cae93297611caa5540b337fb76b68c17d"
+    },
+    {
+      "path": "isaac_control_bridge/urdf/antbot_control_only.urdf.xacro",
+      "sha256": "32016287d983936df7590d3ab3b66b5cbbd8679fed2b282e7e9b42bbf7af2500"
+    },
+    {
+      "path": "isaac_control_bridge/config/swerve_controller.yaml",
+      "sha256": "282df415cd49b2bff14c0fd8b59af85ca14ccc807ec83c8dd2a2e2cb180a323a"
+    },
+    {
+      "path": "isaac_control_bridge/include/antbot_isaac_control/isaac_topic_system.hpp",
+      "sha256": "7abe709d086a7032ba35dcb8cd00b420a5de4cd8242c296d7e26cfac30a003b9"
+    },
+    {
+      "path": "path_following_controller/package.xml",
+      "sha256": "e29e3593099815c4ed7f4d8217a66d29b535ae4146463c2935b5b3ef95208fe1"
+    },
+    {
+      "path": "path_following_controller/CMakeLists.txt",
+      "sha256": "4ad6da9bf56d8d1ac994bc8a27ffb2767fa9639443ca8aa07a3a692125125032"
+    },
+    {
+      "path": "path_following_controller/scripts/scan_fix_relay.py",
+      "sha256": "fc712171975f276cbb007ad3ca7e5f743b4c977b4f2c414d6ad61d05e14abb2b"
+    },
+    {
+      "path": "path_following_controller/maps/depot.sdf",
+      "sha256": "8eeb1785c3aa7cba9a49d9d409d550b0e06cf0b582e91fc6a64c03a98d070481"
+    },
+    {
+      "path": "path_following_controller/maps/depot_sim.yaml",
+      "sha256": "8073c91f16a8f5c7681508938d32d51584733b14d925adba5fef27396be3ef73"
+    },
+    {
+      "path": "path_following_controller/maps/depot_sim.pgm",
+      "sha256": "06f61e53f0edbc8ef64b62499c504e40cdf9263342c01ab00feeb56f60c82639"
+    },
+    {
+      "path": "path_following_controller/maps/worlds.yaml",
+      "sha256": "392c54323b95d94e35e588bbdcdf491eb8cd2bbf0540f167ecbb0ab4e0213f8e"
+    },
+    {
+      "path": "path_following_controller/launch/localization.launch.py",
+      "sha256": "90fe1124e709651e8780e5eefac47e12784c384fb74639030cc3bc8e0c31124b"
+    },
+    {
+      "path": "path_following_controller/launch/slam.launch.py",
+      "sha256": "fd171081af4c67f7d7e0deb31c6efce291a87386ef4fad08b1133165fffa928d"
+    },
+    {
+      "path": "path_following_controller/launch/navigation.launch.py",
+      "sha256": "870a9d4d09ef5b36460aa6693740d7f5168be10261553f0867f37bab143b2ab6"
+    },
+    {
+      "path": "path_following_controller/launch/isaac_rpp.launch.py",
+      "sha256": "17acfe5cfeefd3c97a39c5b6b3fcd36dd8b11157c8d27a1f6f2b836750af86f3"
+    },
+    {
+      "path": "path_following_controller/src/mpc_rpp_controller.cpp",
+      "sha256": "940c57d2e7bb1460a89780a668b344e851566aba728c5083c0730f5bb545a1db"
+    },
+    {
+      "path": "path_following_controller/src/mpc_tracking.hpp",
+      "sha256": "9ec9775d34dd5382e5af6bf3878c5dee1582627c70771e6143a2f763f80ae8b2"
+    },
+    {
+      "path": "path_following_controller/rviz/navigation.rviz",
+      "sha256": "30e19b31849e11729a400a24789c214f9184527371b793fbebe6bffadc011674"
+    },
+    {
+      "path": "path_following_controller/config/real/ekf.yaml",
+      "sha256": "95ed211ac2dcdbdbe3a3de769aada983f0e83218f9a89e911bb3b02c0506bcb4"
+    },
+    {
+      "path": "path_following_controller/config/real/slam_toolbox_params.yaml",
+      "sha256": "5b21b372ce48804dcf09c58de87c66bf87bc80926c84fc9ae34bed5d02517620"
+    },
+    {
+      "path": "path_following_controller/config/real/nav2_params.yaml",
+      "sha256": "34530eb893764656addc2a26b2be22593325213010811409aacd777ca140aaab"
+    },
+    {
+      "path": "path_following_controller/config/sim/ekf.yaml",
+      "sha256": "8f5c5d2098d24af07adeaccc3c4eef33f75c8ae3f07beea232c78c6faab5c715"
+    },
+    {
+      "path": "path_following_controller/config/sim/slam_toolbox_params.yaml",
+      "sha256": "a22232f334c170a0fb9fbcc50a1965c12915cb0dad2a6e01dbf6f9b2891a3b1d"
+    },
+    {
+      "path": "path_following_controller/config/sim/nav2_params.yaml",
+      "sha256": "a9b72ba4119f91e8540b7790f6f9c5483d0c6e8e419c48d98492419140743e9c"
+    },
+    {
+      "path": "path_following_controller/config/isaac/mpc_execution.yaml",
+      "sha256": "54953ab0879bad302dc4f2c58deecd84f321d9700f95887a6eeb5c40ba27213d"
+    },
+    {
+      "path": "path_following_controller/config/isaac/rpp.yaml",
+      "sha256": "e151e781ba9451cc70c7de1cbc86988dd2d2a10132800e07e2f49131339a2815"
+    },
+    {
+      "path": "docker/compose.isaac.yaml",
+      "sha256": "6eb16f08c358f98e0f3bc8dd7852f5c3be3cf094c6eb05cd7da8b756f4fb83a0"
+    },
+    {
+      "path": "docker/compose.two_antbots.yaml",
+      "sha256": "268593ce30e5e5d14ca7a417bc5ef1a2aa7c0f1d8a6cd27d918e08812d3d3dfa"
+    },
+    {
+      "path": "docker/run-two-antbots.sh",
+      "sha256": "41c51d2febba1cc58177f28963e801e7ed20d4ee8c4db016b782df43f30c17a7"
+    },
+    {
+      "path": "docker/isaac-lab.Dockerfile",
+      "sha256": "4cf9624cbf0709e99e9b83eedddb340a4c693b96ec7fb060f22971947a166beb"
+    },
+    {
+      "path": "docker/isaac.dockerignore",
+      "sha256": "c0e4d2294e38f545e3f7e23f703cde5d26e9d93f8e32b0676e58dd1890b0c670"
+    },
+    {
+      "path": "docker/build-ros-messages.sh",
+      "sha256": "9a43e56d3c5338574129c87870dece9aa0f3935be1cdb30b7c993abc2492231d"
+    },
+    {
+      "path": "controller_bringup/launch/two_antbot_controllers.launch.py",
+      "sha256": "d2ede35997679fc0b000578e75f94a48af30cd5c761df025d6cddc9cee4d4fc6"
+    },
+    {
+      "path": "controller_bringup/antbot_mpc_ros/cv_model.py",
+      "sha256": "18a37451181d403136f1c3cee5731e3053d789346885490e9a184884f56f557e"
+    },
+    {
+      "path": ".env",
+      "sha256": "8132123f8bb95e1453b0ecc583c08499b03981394cd1d1b89b46dafff5a07581"
+    },
+    {
+      "path": "docker/web-viewer/Dockerfile",
+      "sha256": "9ccf64e8ed883d0142a790499d8b7c85eaee1167f6cb12b3582343538a8f9858"
+    },
+    {
+      "path": "controller_bringup/antbot_mpc_ros/cv_model.py",
+      "sha256": "18a37451181d403136f1c3cee5731e3053d789346885490e9a184884f56f557e"
+    },
+    {
+      "path": "dmpc_runtime/path_viewer.py",
+      "source_path": "/home/ubuntu/tjdbsk/mpc_planner_workspace/isaac_mpc/two/controller_bringup/antbot_mpc_ros/peer_prediction_viewer.py",
+      "sha256": "c09bf3b2f93710c0f7a574a77e82dde570d006a9984cea89a2380d293d57ee71",
+      "note": "Adapted viewer: local module, scenario geometry, DMPC labels and default port 8092."
+    }
+  ]
+}

@@ -1,0 +1,126 @@
+name: ${COMPOSE_PROJECT_NAME}
+
+services:
+  isaac-sim:
+    image: ${ISAAC_SIM_IMAGE}
+    network_mode: host
+    runtime: nvidia
+    user: "1234:1234"
+    shm_size: "16gb"
+    environment:
+      ACCEPT_EULA: "Y"
+      PRIVACY_CONSENT: ${PRIVACY_CONSENT:-N}
+      PYTHONDONTWRITEBYTECODE: "1"
+      NVIDIA_VISIBLE_DEVICES: ${GPU_DEVICE}
+      ISAACSIM_HOST: ${ISAACSIM_HOST}
+      ISAACSIM_SIGNAL_PORT: ${ISAACSIM_SIGNAL_PORT}
+      ISAACSIM_STREAM_PORT: ${ISAACSIM_STREAM_PORT}
+    volumes:
+      - type: bind
+        source: .
+        target: /workspace
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./.isaac-sim/cache/main
+        target: /isaac-sim/.cache
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./.isaac-sim/cache/computecache
+        target: /isaac-sim/.nv/ComputeCache
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./.isaac-sim/logs
+        target: /isaac-sim/.nvidia-omniverse/logs
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./.isaac-sim/config
+        target: /isaac-sim/.nvidia-omniverse/config
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./.isaac-sim/data
+        target: /isaac-sim/.local/share/ov/data
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./.isaac-sim/pkg
+        target: /isaac-sim/.local/share/ov/pkg
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./.isaac-sim/hub
+        target: /var/cache/hub
+        bind:
+          create_host_path: false
+    working_dir: /workspace
+    healthcheck:
+      interval: 30s
+      timeout: 10s
+      start_period: 180s
+      retries: 3
+      test:
+        - CMD-SHELL
+        - 'logdir=/isaac-sim/.nvidia-omniverse/logs/Kit; [ -d "$$logdir" ] && latest=$$(ls -t "$$logdir"/*/*/kit_*.log 2>/dev/null | head -1) && [ -n "$$latest" ] && grep -q AppReady "$$latest"'
+    restart: unless-stopped
+
+  isaac-lab:
+    profiles: ["lab"]
+    image: ${ISAAC_LAB_IMAGE}
+    build:
+      context: .
+      dockerfile: docker/isaac-lab.Dockerfile
+      network: host
+      args:
+        ISAAC_SIM_BASE_IMAGE: ${ISAAC_SIM_IMAGE}
+        ISAAC_LAB_VERSION: ${ISAAC_LAB_VERSION}
+    network_mode: host
+    runtime: nvidia
+    user: "1234:1234"
+    shm_size: "16gb"
+    environment:
+      ACCEPT_EULA: "Y"
+      PRIVACY_CONSENT: ${PRIVACY_CONSENT:-N}
+      PYTHONDONTWRITEBYTECODE: "1"
+      NVIDIA_VISIBLE_DEVICES: ${GPU_DEVICE}
+      ISAACSIM_HOST: ${ISAACSIM_HOST}
+      ISAACSIM_SIGNAL_PORT: ${ISAACSIM_SIGNAL_PORT}
+      ISAACSIM_STREAM_PORT: ${ISAACSIM_STREAM_PORT}
+      PUBLIC_IP: ${ISAACSIM_HOST}
+      RMW_IMPLEMENTATION: rmw_zenoh_cpp
+      ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-30}
+    volumes:
+      - .:/workspace
+      - ./.isaac-sim/cache/main:/isaac-sim/.cache
+      - ./.isaac-sim/cache/computecache:/isaac-sim/.nv/ComputeCache
+    working_dir: /workspace
+    entrypoint: ["/bin/bash", "-lc"]
+    command: ["trap 'exit 0' TERM INT; while sleep 3600; do :; done"]
+    healthcheck:
+      disable: true
+    restart: unless-stopped
+
+  web-viewer:
+    image: ${COMPOSE_PROJECT_NAME}-web-viewer:6.0.1
+    build:
+      context: ./docker/web-viewer
+      network: host
+      args:
+        ISAACSIM_HOST: ${ISAACSIM_HOST}
+        ISAACSIM_SIGNAL_PORT: ${ISAACSIM_SIGNAL_PORT}
+        ISAACSIM_STREAM_PORT: ${ISAACSIM_STREAM_PORT}
+    network_mode: host
+    command: ["npx", "vite", "preview", "--host", "--port", "${WEB_VIEWER_PORT}"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${WEB_VIEWER_PORT}/"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+    depends_on:
+      isaac-sim:
+        condition: service_healthy
+    restart: unless-stopped

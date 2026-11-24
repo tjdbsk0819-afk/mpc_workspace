@@ -1,0 +1,27 @@
+name: dmpc-two-antbots
+services:
+  ros:
+    image: dmpc-local:jazzy
+    build:
+      context: .
+      dockerfile: isaac/docker/Dockerfile.dmpc
+    init: true
+    user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
+    working_dir: /workspace
+    network_mode: host
+    environment:
+      ROS_DOMAIN_ID: "${ROS_DOMAIN_ID:-31}"
+      RMW_IMPLEMENTATION: rmw_zenoh_cpp
+      ZENOH_SESSION_CONFIG_URI: /workspace/isaac/simulation_runtime/ros2_config/zenoh_session.json5
+      PYTHONPATH: /workspace:/workspace/isaac
+    volumes:
+      - .:/workspace:rw
+    command: bash
+  router:
+    image: dmpc-local:jazzy
+    init: true
+    network_mode: host
+    environment:
+      ROS_DOMAIN_ID: "${ROS_DOMAIN_ID:-31}"
+      RMW_IMPLEMENTATION: rmw_zenoh_cpp
+    command: ["ros2", "run", "rmw_zenoh_cpp", "rmw_zenohd"]

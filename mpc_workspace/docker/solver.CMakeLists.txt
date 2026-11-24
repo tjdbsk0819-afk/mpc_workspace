@@ -1,0 +1,37 @@
+cmake_minimum_required(VERSION 3.8)
+project(mpc_planner_solver)
+
+find_package(ament_cmake REQUIRED)
+find_package(mpc_planner_util REQUIRED)
+include(solver.cmake)
+
+add_library(${PROJECT_NAME} SHARED
+  ${solver_SOURCES}
+  src/state.cpp
+  src/mpc_planner_parameters.cpp
+)
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
+target_include_directories(${PROJECT_NAME} PUBLIC
+  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+  "$<INSTALL_INTERFACE:include>"
+  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/acados>"
+  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/acados/Solver>"
+  "$<INSTALL_INTERFACE:include/${PROJECT_NAME}/acados>"
+  "$<INSTALL_INTERFACE:include/${PROJECT_NAME}/acados/Solver>"
+  "${acados_include_path}"
+  "${acados_include_path}/blasfeo/include"
+  "${acados_include_path}/hpipm/include"
+)
+ament_target_dependencies(${PROJECT_NAME} mpc_planner_util)
+target_link_libraries(${PROJECT_NAME} ${solver_LIBRARIES})
+
+install(TARGETS ${PROJECT_NAME} EXPORT export_${PROJECT_NAME}
+  LIBRARY DESTINATION lib ARCHIVE DESTINATION lib RUNTIME DESTINATION bin)
+install(DIRECTORY include/ DESTINATION include)
+install(DIRECTORY acados/ DESTINATION include/${PROJECT_NAME}/acados
+  FILES_MATCHING PATTERN "*.h")
+install(FILES acados/Solver/libacados_ocp_solver_Solver.so DESTINATION lib)
+install(DIRECTORY config/ DESTINATION share/${PROJECT_NAME}/config)
+ament_export_targets(export_${PROJECT_NAME} HAS_LIBRARY_TARGET)
+ament_export_dependencies(mpc_planner_util)
+ament_package(CONFIG_EXTRAS mpc_planner_solver-extras.cmake)

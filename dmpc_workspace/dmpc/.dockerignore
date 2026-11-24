@@ -1,0 +1,11 @@
+.git
+build
+*.egg-info
+**/__pycache__
+**/*.pyc
+**/.pytest_cache
+isaac/message_build
+isaac/control_build
+isaac/results
+**/node_modules
+figures

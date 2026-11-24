@@ -1,0 +1,16 @@
+# Positions are world-frame meters; start yaw is radians.
+default_scenario: staggered
+robots:
+  robot_a:
+    start: [-3.0, 0.0, 0.0]
+    goal: [3.0, 0.0]
+  robot_b:
+    start: [3.0, 0.0, 3.141592653589793]
+    goal: [-3.0, 0.0]
+  robot_c:
+    start: [0.0, -3.0, 1.5707963267948966]
+    goal: [0.0, 3.0]
+scenarios:
+  staggered:
+    robot_c_start: [0.0, -5.0, 1.5707963267948966]
+  simultaneous: {}

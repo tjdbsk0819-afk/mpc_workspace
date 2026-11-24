@@ -1,0 +1,39 @@
+FROM antbot-dmpc:jazzy
+
+USER root
+ARG ACADOS_COMMIT=d49d47e0f0c185c0e448671328c43ccda705eceb
+ARG BUILD_JOBS=4
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl libyaml-cpp-dev ros-jazzy-eigen3-cmake-module \
+    && rm -rf /var/lib/apt/lists/*
+RUN git clone https://github.com/acados/acados.git /opt/acados \
+    && git -C /opt/acados checkout ${ACADOS_COMMIT} \
+    && git -C /opt/acados submodule update --init --recursive \
+    && cmake -S /opt/acados -B /opt/acados/build \
+       -DCMAKE_BUILD_TYPE=Release -DACADOS_SILENT=ON \
+       -DBLASFEO_TARGET=GENERIC -DHPIPM_TARGET=GENERIC \
+    && cmake --build /opt/acados/build --parallel ${BUILD_JOBS} \
+    && cmake --install /opt/acados/build
+
+# Keep the original ROS/legacy Python environment available to existing nodes.
+RUN python3 -m venv --system-site-packages /opt/antbot-solver-venv \
+    && /opt/antbot-solver-venv/bin/pip install --no-cache-dir \
+       numpy==1.26.4 casadi==3.6.6 scipy==1.13.1 matplotlib==3.10.3 colorama==0.4.6 \
+    && /opt/antbot-solver-venv/bin/pip install --no-cache-dir \
+       /opt/acados/interfaces/acados_template
+RUN mkdir -p /opt/acados/bin \
+    && curl -fL --retry 3 \
+       https://github.com/acados/tera_renderer/releases/download/v0.0.34/t_renderer-v0.0.34-linux \
+       -o /opt/acados/bin/t_renderer \
+    && chmod 755 /opt/acados/bin/t_renderer
+
+ENV ACADOS_SOURCE_DIR=/opt/acados \
+    ANTBOT_SOLVER_PYTHON=/opt/antbot-solver-venv/bin/python \
+    LD_LIBRARY_PATH=/opt/acados/lib
+RUN /opt/antbot-solver-venv/bin/python -c 'import acados_template, casadi; assert casadi.__version__ == "3.6.6"'
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ros-jazzy-nav2-controller ros-jazzy-nav2-regulated-pure-pursuit-controller \
+    ros-jazzy-nav2-lifecycle-manager \
+    && rm -rf /var/lib/apt/lists/*
+COPY --chmod=755 docker/ros-entrypoint.sh /opt/antbot/ros-entrypoint.sh
+USER 1000:1000

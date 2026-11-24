@@ -1,0 +1,8 @@
+# Shared by every robot. These parameters never assign an ID-based role.
+/**:
+  ros__parameters:
+    recovery_enabled: true
+    recovery_stall_time: 3.0
+    recovery_progress_distance: 0.08
+    recovery_cooldown: 6.0
+    recovery_switch_cost: 0.05

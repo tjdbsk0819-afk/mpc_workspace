@@ -1,0 +1,34 @@
+name: antbot-gazebo-dmpc
+services:
+  runtime:
+    image: antbot-gazebo-dmpc:jazzy
+    build:
+      context: .
+      dockerfile: gazebo/Dockerfile
+      args:
+        BASE_IMAGE: antbot-dmpc:jazzy
+    user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
+    network_mode: host
+    ipc: host
+    working_dir: /workspace
+    init: true
+    stop_grace_period: 30s
+    entrypoint: [bash, /workspace/gazebo/entrypoint.sh]
+    environment:
+      GZ_PARTITION: antbot-gazebo-dmpc
+      ANTBOT_PLANNER: dmpc
+      ANTBOT_REFERENCE: /workspace/isaac
+      ROS_DOMAIN_ID: "${ROS_DOMAIN_ID:-31}"
+      RMW_IMPLEMENTATION: rmw_fastrtps_cpp
+      FASTRTPS_DEFAULT_PROFILES_FILE: /workspace/gazebo/single_mpc/fastdds_udp.xml
+      ROS_LOG_DIR: /tmp/antbot_gazebo_ros
+      HOME: /tmp
+      PYTHONDONTWRITEBYTECODE: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      DISPLAY: "${DISPLAY:-}"
+      QT_X11_NO_MITSHM: '1'
+    volumes:
+      - .:/workspace:rw
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    command: [bash]

@@ -1,0 +1,151 @@
+# dmpc
+
+## Gazebo 3·4대 테스트
+
+A/B/C/D 시나리오를 유지한 Gazebo Harmonic/Jazzy 실행 경로는
+[gazebo/README.md](gazebo/README.md)를 참조하세요.
+`bash run_gazebo.sh sim --scenario B --robots 3`으로 실행합니다.
+C++/Gazebo 물리 빌드·주행 검증은 디스크 공간 확보 후 진행해야 합니다.
+
+The decentralized planners now predict other robots locally from current
+position/velocity observations rather than sharing MPC solution trajectories.
+For two Isaac AntBots with state relays, IPOPT, native RPP and Swerve, see
+[the Isaac setup and commands](isaac/README.md).
+
+Isaac 실험 문서:
+- [기존 mpc_planner와 변경 사항](docs/MPC_PLANNER_COMPARISON.md)
+- [A → B → C → D 실행 및 자동 결과 기록](docs/SCENARIO_TEST_GUIDE.md)
+- [준비 검증과 실제 테스트 결과](docs/SCENARIO_TEST_RESULTS.md)
+- [목표 정지 문제 재현·분석·수정](docs/SCENARIO_TEST_RESULTS.md#goal-stop-fix)
+
+This project implements distributed and decentralized model predictive control (DMPC) strategies for multi-agent systems using **CasADi**.
+
+<div>
+  <img src="media/thumbnail2.gif" height="375">
+</div>
+
+## Quick-start
+```bash
+git clone git@github.com:derekc22/dmpc.git
+cd dmpc
+conda env create -f environment.yml
+conda activate dmpc
+./run.sh drone
+```
+
+## Features
+
+### Control Architectures
+This project implements two main DMPC architectures:
+- **Distributed**: A single, centralized solver solves a global optimization problem. More computationally intensive but may yield better performance.
+- **Decentralized**: Agents solve local optimization problems using locally
+  predicted object trajectories from current position/velocity observations.
+  Optimized trajectories and controls stay local to each agent. The legacy
+  `jacobi` and `gauss-seidel` mode arguments are accepted, but both use the same
+  state snapshot; there is no inter-agent solution exchange.
+  
+Both architectures support:
+- **Standard**: Each agent plans its trajectory independently.
+- **Leader-Follower**: One agent (leader) plans its trajectory, and followers plan their trajectories to track the leader.
+- **Rendezvous**: Agents rendezvous with one another.
+
+### Dynamics
+
+Each agent's dynamics are defined by two functions, `f_true` and `f_plant`:
+
+- `f_true` is a NumPy function for the **true system** dynamics.
+- `f_plant` is a CasADi function for the **system model** dynamics used by the MPC solver. 
+- Note: `f_plant` and `f_true` may differ in terms of integrator choice, model fidelity (e.g., nonlinear vs. linear, full-order vs reduced-order), stochasticity, etc. 
+  - In general, `f_true` should implement a high-fidelity representation of the system dynamics, including any real-world phenomenon like stochasticity, disturbances, etc.
+  - By contrast, `f_plant` should implement a low-fidelity, reduced-order, virtual, or other representation of the system dynamics. These are the dynamics that the MPC solver optimizes over. As such, this implementation should ideally be computationally simple to allow for real-time control.
+
+### Constraints
+- **Input constraints**: Specify minimum and maximum control input values.
+- **Inter-agent collision avoidance**: Specify minimum distance between agents.
+- **Obstacle avoidance**: Place static, spherical obstacles in the environment.
+
+### MuJoCo Integration
+This repository integrates with MuJoCo for high-fidelity simulation of `f_true` dynamics. To make use of this feature:
+1. Specify the per-agent `qpos`, `qvel`, and input dimensions as `nq`, `nv`, and `na`, respectively.
+   - Note that `nq`, `nv`, and `na` may differ from the state and input dimensions used by the MPC solver, `nx` and `nu`.
+2. Implement `f_true`, which should query `mj_data` to retrieve the system state. This function receives the following arguments:
+   - `m`: Agent index.
+   - `mj_model`: MuJoCo model object.
+   - `mj_data`: MuJoCo data object.
+   - `u`: Optimal control input as computed by the MPC solver.
+3. Specify the MuJoCo XML and generate the accompanying XML configuration object:
+   - Specify the complete `<body>` definition tag for a single agent.
+   - Specify the input definition tag for a single agent (i.e., `<motor>`, `<general>`, etc), without the enclosing `<actuator>` tag.
+4. Load and reset the MuJoCo simulation objects with `load_model()` and `reset_model()`, respectively. Also, specify visualization presets, if desired.
+5. Run the DMPC simulation and ensure the flag `use_mj` is set to `True`.
+
+### Examples
+- **Bicycle**: 5-state, two-dimensional kinematic bicycle model. 
+  - `f_plant` and `f_true`: implemented identically with forward Euler integration.
+- **Double Integrator**: 12-state, three-dimensional double integrator model.
+  - `f_plant` and `f_true`: implemented identically with forward Euler integration.
+- **Drone**: Three-dimensional quadcopter dynamics.
+  - `f_plant` implements reduced-order (6-state) quadcopter dynamics (with forward Euler integration) for virtual input computation.
+  - `f_true` uses MuJoCo to obtain full-state quadcopter dynamics.
+
+## Installation
+
+Create and activate the conda environment:
+```bash
+conda env create -f environment.yml
+conda activate dmpc
+```
+
+## Usage
+All figures and videos are saved to the `figures/` directory.
+
+To run without MuJoCo visualization:
+  
+- Run the `<model>.py` scripts with python:
+  ```bash
+  python3 -m scripts.bicycle # Bicycle example
+  python3 -m scripts.dbl_int # Double integrator example
+  python3 -m scripts.drone   # Drone example
+  ```
+
+- Or, to re-run failed simulations until successful completion:
+  ```
+  ./run.sh bicycle # Bicycle example
+  ./run.sh dbl_int # Double integrator example
+  ./run.sh drone   # Drone example
+  ```
+To run with MuJoCo visualization:
+
+*Note: currently, only the "drone" example supports MuJoCo*
+  
+- Set `enable_viewer=True` in `<model>.py` and run the `<model>.py` script with `mjpython`:
+    ```bash
+    mjpython -m scripts.drone   # Drone example
+    ```
+- Or, to re-run failed simulations until successful completion, set `enable_viewer=True` in `<model>.py` and run:
+    ```
+    ./run.sh -v drone   # Drone example
+    ```
+
+## Structure
+
+`scripts/`: Example scripts for different dynamics models.
+- `bicycle.py`: Example script for bicycle dynamics.
+- `dbl_int.py`: Example script for double integrator dynamics.
+- `drone.py`: Example script for drone dynamics.
+
+`src/`: Source code for DMPC implementations.
+- `distributed.py`: Distributed MPC implementation.
+- `decentralized.py`: Decentralized MPC implementation (Jacobi and Gauss-Seidel).
+- `distributed_leader.py`: Distributed MPC for leader-follower tasks.
+- `decentralized_leader.py`: Decentralized MPC for leader-follower tasks.
+- `distributed_rendezvous.py`: Distributed MPC for rendezvous tasks.
+- `decentralized_rendezvous.py`: Decentralized MPC for rendezvous tasks.
+
+`utils/`:
+- `plot_utils.py`: Plotting utilities
+- `mj_utils.py`: MuJoCo utilities for visualization, XML generation, etc.
+
+`run.sh`: Shell script to re-run failed simulations until all complete successfully.
+
+`figures/`: Save directory for generated figures and videos.

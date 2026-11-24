@@ -1,0 +1,7 @@
+name = "gazebo_mpc"
+supported_robot_counts = [3, 4]
+scenarios = ["A", "B", "C", "D"]
+simulator = "gazebo_harmonic"
+ros = "jazzy"
+status = "implementation_ready_physics_validation_pending"
+tracking_architecture = "mpc_native_rpp_swerve"

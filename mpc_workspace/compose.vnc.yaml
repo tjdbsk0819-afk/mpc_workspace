@@ -1,0 +1,15 @@
+services:
+  gazebo-vnc:
+    image: mpc-workspace:humble-gazebo-vnc
+    build:
+      context: .
+      dockerfile: Dockerfile.vnc
+    container_name: mpc-gazebo-vnc
+    network_mode: host
+    ipc: host
+    shm_size: 1gb
+    environment:
+      ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-42}
+    volumes:
+      - ./src:/host_src:ro
+    working_dir: /mpc_workspace

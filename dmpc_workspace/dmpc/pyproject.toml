@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dmpc-runtime"
+version = "0.1.0"
+description = "IPOPT MPC with state-only moving-object prediction and Isaac ROS adapters"
+requires-python = ">=3.10"
+dependencies = ["casadi==3.7.0", "numpy>=1.26", "PyYAML>=6"]
+
+[project.scripts]
+dmpc-simulate = "dmpc_runtime.simulate:main"
+
+[tool.setuptools]
+packages = ["dmpc_runtime", "simulation", "simulation.helpers"]
+
+[tool.setuptools.package-dir]
+simulation = "isaac/simulation"

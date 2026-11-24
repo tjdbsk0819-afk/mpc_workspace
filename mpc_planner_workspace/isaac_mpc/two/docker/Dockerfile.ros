@@ -1,0 +1,54 @@
+FROM ros:jazzy-ros-base-noble
+
+LABEL org.opencontainers.image.title="AntBot DMPC ROS 2 Jazzy development" \
+      org.opencontainers.image.description="ROS 2 Jazzy and Zenoh, matching the existing Isaac runner"
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    MPLBACKEND=Agg \
+    MPLCONFIGDIR=/tmp/antbot-matplotlib \
+    ROS_LOG_DIR=/tmp/antbot-ros-logs \
+    OPENBLAS_NUM_THREADS=1 \
+    OMP_NUM_THREADS=1 \
+    RMW_IMPLEMENTATION=rmw_zenoh_cpp \
+    VIRTUAL_ENV=/opt/antbot-venv
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+       build-essential cmake git libgomp1 \
+       python3-pip python3-venv python3-colcon-common-extensions \
+       ros-jazzy-rmw-zenoh-cpp \
+       ros-jazzy-ros2-control ros-jazzy-ros2-controllers \
+       ros-jazzy-xacro ros-jazzy-robot-state-publisher \
+       ros-jazzy-generate-parameter-library ros-jazzy-realtime-tools ros-jazzy-backward-ros \
+       ros-jazzy-nav2-controller ros-jazzy-nav2-regulated-pure-pursuit-controller \
+       ros-jazzy-nav2-lifecycle-manager \
+       ros-jazzy-rosidl-default-generators \
+       libeigen3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN python3 -m venv --system-site-packages /opt/antbot-venv
+ENV PATH=/opt/antbot-venv/bin:${PATH}
+COPY docker/requirements-ros.txt /opt/antbot/requirements.txt
+RUN python -m pip install --no-cache-dir -r /opt/antbot/requirements.txt
+
+WORKDIR /workspace
+COPY . .
+RUN python -m pip install --no-cache-dir --no-deps . \
+    && python -m unittest discover -s tests -v
+
+# Validate Python ABI and RMW registration without starting a ROS context or router.
+RUN . /opt/ros/jazzy/setup.sh \
+    && python -c "import rclpy; from rclpy.utilities import get_available_rmw_implementations; assert 'rmw_zenoh_cpp' in get_available_rmw_implementations()"
+
+COPY docker/ros-entrypoint.sh /opt/antbot/ros-entrypoint.sh
+RUN chmod +x /opt/antbot/ros-entrypoint.sh \
+    && if ! getent group 1000 >/dev/null; then groupadd --gid 1000 antbot; fi \
+    && if ! getent passwd 1000 >/dev/null; then useradd --uid 1000 --gid 1000 --create-home antbot; fi \
+    && mkdir -p /workspace/results \
+    && chown -R 1000:1000 /workspace
+USER 1000:1000
+
+ENTRYPOINT ["/opt/antbot/ros-entrypoint.sh"]
+CMD ["bash"]

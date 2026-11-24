@@ -1,0 +1,72 @@
+# Merge with docker/compose.isaac.yaml; start using docker/run-two-antbots.sh.
+services:
+  two-antbot-cache-init:
+    profiles: ["lab"]
+    image: ${ISAAC_LAB_IMAGE:?Isaac Lab image must be configured}
+    user: "0:0"
+    runtime: runc
+    network_mode: none
+    read_only: true
+    cap_drop: [ALL]
+    cap_add: [CHOWN, DAC_OVERRIDE, FOWNER]
+    entrypoint: ["/bin/bash", "-euc"]
+    command:
+      - |
+        mkdir -p /cache/kit/ov/texturecache /cache/runtime-kit /cache/cuda
+        chown -R --no-dereference 1234:1234 /cache/kit /cache/runtime-kit /cache/cuda
+        chmod u+rwx /cache/kit /cache/kit/ov /cache/kit/ov/texturecache /cache/runtime-kit /cache/cuda
+        echo "Two-AntBot cache volumes ready for Isaac user 1234:1234"
+    volumes:
+      - type: volume
+        source: two-antbot-kit-cache
+        target: /cache/kit
+        volume:
+          nocopy: true
+      - type: volume
+        source: two-antbot-runtime-kit-cache
+        target: /cache/runtime-kit
+        volume:
+          nocopy: true
+      - type: volume
+        source: two-antbot-cuda-cache
+        target: /cache/cuda
+        volume:
+          nocopy: true
+  isaac-lab:
+    user: "1234:1234"
+    working_dir: /workspace/isaac
+    environment:
+      ANTBOT_ISAAC_WORKSPACE: /workspace/isaac
+      PYTHONDONTWRITEBYTECODE: "1"
+    volumes:
+      - type: bind
+        # ROS symlink-install targets /workspace/isaac/... in the build
+        # container. Mount the repository at the SAME path in Isaac.
+        source: ${ISAAC_MPC_ROOT:?Use docker/run-two-antbots.sh}
+        target: /workspace
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: volume
+        source: two-antbot-kit-cache
+        target: /isaac-sim/.cache
+        volume:
+          nocopy: true
+      - type: volume
+        # Kit writes RTX/driver shaders and derived data here, outside ~/.cache.
+        source: two-antbot-runtime-kit-cache
+        target: /isaac-sim/kit/cache
+        volume:
+          nocopy: true
+      - type: volume
+        source: two-antbot-cuda-cache
+        target: /isaac-sim/.nv/ComputeCache
+        volume:
+          nocopy: true
+volumes:
+  two-antbot-kit-cache:
+    name: dmpc-two-kit-cache
+  two-antbot-runtime-kit-cache:
+    name: dmpc-two-runtime-kit-cache
+  two-antbot-cuda-cache:
+    name: dmpc-two-cuda-cache

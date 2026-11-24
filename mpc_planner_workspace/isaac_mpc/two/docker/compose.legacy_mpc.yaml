@@ -1,0 +1,45 @@
+name: antbot-dmpc
+
+services:
+  sim:
+    image: antbot-dmpc:sim
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.legacy_sim
+    init: true
+    user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
+    working_dir: /workspace
+    volumes:
+      - .:/workspace:ro
+      - ./results:/workspace/results:rw
+    command:
+      - python
+      - -m
+      - legacy_mpc_reference.simulate
+      - --scenario
+      - A
+      - --mode
+      - both
+      - --output
+      - results/docker
+
+  ros:
+    profiles: [ros]
+    image: antbot-dmpc:jazzy
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.ros
+    init: true
+    user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
+    network_mode: host
+    stdin_open: true
+    tty: true
+    environment:
+      ROS_DOMAIN_ID: "${ROS_DOMAIN_ID:-30}"
+      RMW_IMPLEMENTATION: "${RMW_IMPLEMENTATION:-rmw_zenoh_cpp}"
+      ZENOH_SESSION_CONFIG_URI: /workspace/simulation_runtime/ros2_config/zenoh_session.json5
+      PYTHONPATH: /workspace
+    volumes:
+      - .:/workspace:rw
+    working_dir: /workspace
+    command: bash

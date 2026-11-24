@@ -1,0 +1,6 @@
+name = "three"
+target_robot_count = 3
+implemented_robot_count = 3
+status = "three_robot_test_environment_ready_goal_convergence_open"
+history = "../docs/ISSUE_TRACKING_20261026.md"
+tracking_architecture = "mpc_native_rpp"

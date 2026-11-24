@@ -1,0 +1,12 @@
+FROM mpc-workspace:humble-gazebo
+
+USER root
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    xvfb x11vnc novnc websockify openbox supervisor xterm \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV DISPLAY=:99 \
+    QT_X11_NO_MITSHM=1 \
+    LIBGL_ALWAYS_SOFTWARE=1
+COPY docker/vnc-supervisord.conf /etc/supervisor/conf.d/vnc.conf
+CMD ["supervisord", "-n", "-c", "/etc/supervisor/conf.d/vnc.conf"]

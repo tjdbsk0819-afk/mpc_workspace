@@ -1,0 +1,6 @@
+name = "two"
+target_robot_count = 2
+implemented_robot_count = 2
+status = "ready"
+history = "../docs/ISSUE_TRACKING_20261026.md"
+tracking_architecture = "mpc_native_rpp"
